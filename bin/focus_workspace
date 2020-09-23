@@ -12,7 +12,6 @@ fi
 CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
 CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output')
 PREVIOUS_WORKSPACE=$(cat ~/.config/i3/run/previous_${CURRENT_OUTPUT})
-echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous_${CURRENT_OUTPUT}
 
 if [ $1 == "previous" ]; then
     i3-msg "workspace number ${PREVIOUS_WORKSPACE}"
@@ -24,6 +23,11 @@ elif [ "$1" == "right" ]; then
     i3-msg "workspace number $(($CURRENT_WORKSPACE + 1))"
 elif [ $1 -gt 0 ] && [ $1 -lt 43 ]; then
     i3-msg "workspace number $1"
+    # Do not update files in run/ if switching output
+    [ $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output') != CURRENT_OUTPUT ] && exit 0
 else
     usage; exit 1
 fi
+
+# Update previous file in run/
+echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous_${CURRENT_OUTPUT}
