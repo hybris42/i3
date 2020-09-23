@@ -24,7 +24,7 @@ elif [ "$1" == "right" ]; then
 elif [ $1 -gt 0 ] && [ $1 -lt 43 ]; then
     i3-msg "workspace number $1"
     # Do not update files in run/ if switching output
-    [ $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output') != CURRENT_OUTPUT ] && exit 0
+    [ $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output') != ${CURRENT_OUTPUT} ] && exit 0
 else
     usage; exit 1
 fi
