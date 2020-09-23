@@ -5,7 +5,7 @@ OLD_NAME=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).name')
 WORKSPACE_NUMBER=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
 
 if [ "${NEW_NAME}" == "" ]; then
-    i3-msg "rename workspace ${OLD_NAME} to ${WORKSPACE_NUMBER}"
+    i3-msg -q "rename workspace ${OLD_NAME} to ${WORKSPACE_NUMBER}"
 else
-    i3-msg "rename workspace ${OLD_NAME} to \"${WORKSPACE_NUMBER}: ${NEW_NAME}\""
+    i3-msg -q "rename workspace ${OLD_NAME} to \"${WORKSPACE_NUMBER}: ${NEW_NAME}\""
 fi

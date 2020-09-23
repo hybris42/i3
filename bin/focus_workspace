@@ -8,26 +8,24 @@ if [ $# -ne 1 ]; then
     usage; exit 1
 fi
 
-# Get current workspace
-CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
-CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output')
-PREVIOUS_WORKSPACE=$(cat ~/.config/i3/run/previous_${CURRENT_OUTPUT})
-
+CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).output")
 if [ $1 == "previous" ]; then
-    i3-msg "workspace number ${PREVIOUS_WORKSPACE}"
+    NEXT_WORKSPACE=$(cat ~/.config/i3/run/previous_${CURRENT_OUTPUT})
 elif [ "$1" == "left" ]; then
-    [ $CURRENT_WORKSPACE -eq 1 ] && CURRENT_WORKSPACE=43
-    i3-msg "workspace number $(($CURRENT_WORKSPACE - 1))"
+    NEXT_WORKSPACE=$(($(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).num") - 1))
+    [ ${NEXT_WORKSPACE} -lt 1 ] && NEXT_WORKSPACE=$(i3-msg -t get_workspaces | jq "[.[] | select(.output==\"${CURRENT_OUTPUT}\").num] | max")
 elif [ "$1" == "right" ]; then
-    [ $CURRENT_WORKSPACE -eq 42 ] && CURRENT_WORKSPACE=0
-    i3-msg "workspace number $(($CURRENT_WORKSPACE + 1))"
+    NEXT_WORKSPACE=$(($(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).num") + 1))
+    [ ${NEXT_WORKSPACE} -gt 42 ] && NEXT_WORKSPACE=$(i3-msg -t get_workspaces | jq "[.[] | select(.output==\"${CURRENT_OUTPUT}\").num] | min")
 elif [ $1 -gt 0 ] && [ $1 -lt 43 ]; then
-    i3-msg "workspace number $1"
-    # Do not update files in run/ if switching output
-    [ $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output') != ${CURRENT_OUTPUT} ] && exit 0
+    CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r ".[] | select(.num==$1).output")
+    i3-msg -q "focus output ${CURRENT_OUTPUT}"
+    NEXT_WORKSPACE=$1
 else
     usage; exit 1
 fi
+CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq ".[] | select(.focused==true).num")
 
+i3-msg -q "workspace number ${NEXT_WORKSPACE}"
 # Update previous file in run/
 echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous_${CURRENT_OUTPUT}
