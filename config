@@ -1,0 +1,91 @@
+set $mod Mod4
+floating_modifier $mod
+
+##########
+# Visual #
+##########
+font pango:Ubuntu Mono 16
+exec --no-startup-id feh --bg-scale ~/.wallpaper
+hide_edge_borders smart
+default_border pixel 1
+workspace_layout default
+
+###########
+# Autorun #
+###########
+exec --no-startup-id "urxvtc -e ''        > /dev/null 2>&1 || urxvtd         > /tmp/urxvtd.log 2>&1"
+exec --no-startup-id "emacsclient -e '()' > /dev/null 2>&1 || emacs --daemon > /tmp/emacs.log  2>&1"
+exec --no-startup-id "xmodmap ~/.xmodmaprc"
+exec --no-startup-id "xbindkeys      > /dev/null 2>&1"
+exec --no-startup-id "nm-applet      > /dev/null 2>&1"
+exec --no-startup-id "pasystray      > /dev/null 2>&1"
+exec --no-startup-id "blueman-applet > /dev/null 2>&1"
+exec --no-startup-id "compton        > /dev/null 2>&1"
+exec --no-startup-id "compton        > /dev/null 2>&1"
+exec --no-startup-id "xss-lock slock"
+
+############
+# BINDINGS #
+############
+# i3 control
+bindsym $mod+Shift+c            kill
+bindsym $mod+Shift+r            reload
+bindsym $mod+Control+r          restart
+bindsym $mod+Control+q          exit
+# basic softs
+bindsym $mod+Return             exec urxvtc
+bindsym $mod+e                  exec emacsclient -c -n
+# Some menus
+bindsym $mod+F1                 exec ~/.config/i3/bin/menu_workspace_name
+bindsym $mod+F2                 exec rofi -modi run -show run
+bindsym $mod+F3                 exec ~/.scripts/generate-rofi-ssh && rofi -lines 50 -modi ssh -show ssh
+bindsym $mod+j                  exec ~/.config/i3/bin/menu_workspace_switch
+# change container layout (tabbed, toggle split)
+bindsym $mod+space              layout toggle tabbed splith
+# Change window focus
+bindsym $mod+Tab                focus next
+bindsym $mod+Shift+Tab          focus prev
+bindsym $mod+Shift+Left         focus left
+bindsym $mod+Shift+Right        focus right
+bindsym $mod+Shift+Down         focus down
+bindsym $mod+Shift+Up           focus up
+# Move focused window
+bindsym $mod+Control+Left       move left
+bindsym $mod+Control+Down       move down
+bindsym $mod+Control+Up         move up
+bindsym $mod+Control+Right      move right
+# switch to workspace
+bindsym $mod+Escape             exec ~/.config/i3/bin/focus_workspace previous
+bindsym $mod+Left               exec ~/.config/i3/bin/focus_workspace left
+bindsym $mod+Right              exec ~/.config/i3/bin/focus_workspace right
+bindsym $mod+1                  exec ~/.config/i3/bin/focus_workspace 1
+bindsym $mod+2                  exec ~/.config/i3/bin/focus_workspace 2
+bindsym $mod+3                  exec ~/.config/i3/bin/focus_workspace 3
+bindsym $mod+4                  exec ~/.config/i3/bin/focus_workspace 4
+bindsym $mod+5                  exec ~/.config/i3/bin/focus_workspace 5
+bindsym $mod+6                  exec ~/.config/i3/bin/focus_workspace 6
+bindsym $mod+7                  exec ~/.config/i3/bin/focus_workspace 7
+bindsym $mod+8                  exec ~/.config/i3/bin/focus_workspace 8
+bindsym $mod+9                  exec ~/.config/i3/bin/focus_workspace 9
+# move focused container to workspace
+bindsym $mod+Shift+1            move container to workspace number 1
+bindsym $mod+Shift+2            move container to workspace number 2
+bindsym $mod+Shift+3            move container to workspace number 3
+bindsym $mod+Shift+4            move container to workspace number 4
+bindsym $mod+Shift+5            move container to workspace number 5
+bindsym $mod+Shift+6            move container to workspace number 6
+bindsym $mod+Shift+7            move container to workspace number 7
+bindsym $mod+Shift+8            move container to workspace number 8
+bindsym $mod+Shift+9            move container to workspace number 9
+# switch/move to output
+bindsym $mod+s                  focus output right
+bindsym $mod+Shift+s            move container to output right
+#######
+# Bar #
+#######
+bar {
+        status_command i3status
+        position top
+        separator_symbol " ⁞ "
+        tray_output HDMI-1
+}

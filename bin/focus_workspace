@@ -1,0 +1,28 @@
+#! /bin/bash
+
+usage() {
+    echo "usage: focus_workspace [previous|left|right|1-42]"
+}
+
+if [ $# -ne 1 ]; then
+    usage; exit 1
+fi
+
+# Get current workspace
+CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
+PREVIOUS_WORKSPACE=$(cat ~/.config/i3/run/previous)
+echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous
+
+if [ $1 == "previous" ]; then
+    i3-msg "workspace number ${PREVIOUS_WORKSPACE}"
+elif [ "$1" == "left" ]; then
+    [ $CURRENT_WORKSPACE -eq 1 ] && CURRENT_WORKSPACE=43
+    i3-msg "workspace number $(($CURRENT_WORKSPACE - 1))"
+elif [ "$1" == "right" ]; then
+    [ $CURRENT_WORKSPACE -eq 42 ] && CURRENT_WORKSPACE=0
+    i3-msg "workspace number $(($CURRENT_WORKSPACE + 1))"
+elif [ $1 -gt 0 ] && [ $1 -lt 43 ]; then
+    i3-msg "workspace number $1"
+else
+    usage; exit 1
+fi
