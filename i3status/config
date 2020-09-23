@@ -3,11 +3,12 @@ general {
         interval = 5
 }
 
-#order += "battery all"
+order += "battery all"
 order += "tztime local"
 
 battery all {
         format = "%status %percentage %remaining"
+        format_down = ""
         status_chr = "⚡"
         status_bat = "🔋"
         low_threshold = 30
