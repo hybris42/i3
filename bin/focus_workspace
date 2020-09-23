@@ -10,7 +10,7 @@ fi
 
 # Get current workspace
 CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
-CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).output')
+CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).output')
 PREVIOUS_WORKSPACE=$(cat ~/.config/i3/run/previous_${CURRENT_OUTPUT})
 echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous_${CURRENT_OUTPUT}
 
