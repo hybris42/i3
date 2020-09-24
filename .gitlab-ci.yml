@@ -5,5 +5,5 @@ stages:
 
 Check config:
   stage: check
-  scripts:
+  script:
     i3 -C config
