@@ -1,0 +1,22 @@
+#! /bin/bash
+
+. ~/.config/i3/env
+
+usage() {
+    echo "usage: move_to_workspace [1-9]"
+}
+
+if [ $# -ne 1 ]; then
+    usage; exit 1
+fi
+
+CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).output")
+
+if [ $1 -gt 0 ] && [ $1 -lt 43 ]; then
+    NEXT_WORKSPACE=$1
+    [ ${CURRENT_OUTPUT} == "${SECONDARY_OUTPUT}" ] && NEXT_WORKSPACE=$((10 + $1))
+else
+    usage; exit 1
+fi
+
+i3-msg -q "move container to workspace ${NEXT_WORKSPACE}"

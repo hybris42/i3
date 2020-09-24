@@ -1,0 +1,20 @@
+#! /bin/bash
+
+. ~/.config/i3/env
+
+usage() {
+    echo "usage: auto-outputs"
+}
+
+if [ $# -ne 0 ]; then
+    usage; exit 1
+fi
+
+xrandr --auto
+if [ -n "${PRIMARY_OUTPUT}" ] && [ -n "${SECONDARY_OUTPUT}" ]; then
+    if [ -n "${SECONDARY_OUTPUT_POSITION}" ]; then
+        xrandr --output ${PRIMARY_OUTPUT} --primary --output ${SECONDARY_OUTPUT} ${SECONDARY_OUTPUT_POSITION} HDMI-1
+    else
+        xrandr --output ${PRIMARY_OUTPUT} --primary --output ${SECONDARY_OUTPUT} --right-of HDMI-1
+    fi
+fi
