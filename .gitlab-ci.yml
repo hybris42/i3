@@ -1,0 +1,9 @@
+---
+
+stages:
+  - check
+
+Check config:
+  stage: check
+  scripts:
+    i3 -C config
