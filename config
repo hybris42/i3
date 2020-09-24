@@ -1,6 +1,8 @@
 set $mod Mod4
 floating_modifier $mod
 
+exec --no-startup-id "~/.config/i3/bin/create_workspaces"
+
 ##########
 # Visual #
 ##########
@@ -80,6 +82,7 @@ bindsym $mod+Shift+9            move container to workspace number 9
 # switch/move to output
 bindsym $mod+s                  focus output right
 bindsym $mod+Shift+s            move container to output right
+
 #######
 # Bar #
 #######

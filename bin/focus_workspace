@@ -1,5 +1,7 @@
 #! /bin/bash
 
+. ~/.config/i3/env
+
 usage() {
     echo "usage: focus_workspace [previous|left|right|1-42]"
 }
@@ -9,22 +11,24 @@ if [ $# -ne 1 ]; then
 fi
 
 CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).output")
+CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq ".[] | select(.focused==true).num")
+
 if [ $1 == "previous" ]; then
     NEXT_WORKSPACE=$(cat ~/.config/i3/run/previous_${CURRENT_OUTPUT})
 elif [ "$1" == "left" ]; then
     NEXT_WORKSPACE=$(($(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).num") - 1))
-    [ ${NEXT_WORKSPACE} -lt 1 ] && NEXT_WORKSPACE=$(i3-msg -t get_workspaces | jq "[.[] | select(.output==\"${CURRENT_OUTPUT}\").num] | max")
+    [ ${CURRENT_OUTPUT} == "${PRIMARY_OUTPUT}" ] && [ ${NEXT_WORKSPACE} -lt 1 ] && NEXT_WORKSPACE=9
+    [ ${CURRENT_OUTPUT} == "${SECONDARY_OUTPUT}" ] && [ ${NEXT_WORKSPACE} -lt 11 ] && NEXT_WORKSPACE=19
 elif [ "$1" == "right" ]; then
     NEXT_WORKSPACE=$(($(i3-msg -t get_workspaces | jq -r ".[] | select(.focused==true).num") + 1))
-    [ ${NEXT_WORKSPACE} -gt 42 ] && NEXT_WORKSPACE=$(i3-msg -t get_workspaces | jq "[.[] | select(.output==\"${CURRENT_OUTPUT}\").num] | min")
+    [ ${CURRENT_OUTPUT} == "${PRIMARY_OUTPUT}" ] && [ ${NEXT_WORKSPACE} -gt 9 ] && NEXT_WORKSPACE=1
+    [ ${CURRENT_OUTPUT} == "${SECONDARY_OUTPUT}" ] && [ ${NEXT_WORKSPACE} -gt 19 ] && NEXT_WORKSPACE=11
 elif [ $1 -gt 0 ] && [ $1 -lt 43 ]; then
-    CURRENT_OUTPUT=$(i3-msg -t get_workspaces | jq -r ".[] | select(.num==$1).output")
-    i3-msg -q "focus output ${CURRENT_OUTPUT}"
     NEXT_WORKSPACE=$1
+    [ ${CURRENT_OUTPUT} == "${SECONDARY_OUTPUT}" ] && [ -z "${ROFI_INPUT}" ] && NEXT_WORKSPACE=$((10 + $1))
 else
     usage; exit 1
 fi
-CURRENT_WORKSPACE=$(i3-msg -t get_workspaces | jq ".[] | select(.focused==true).num")
 
 i3-msg -q "workspace number ${NEXT_WORKSPACE}"
 # Update previous file in run/

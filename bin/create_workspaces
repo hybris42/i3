@@ -1,0 +1,26 @@
+#! /bin/bash
+
+. ~/.config/i3/env
+
+usage() {
+    echo "usage: create_workspaces"
+}
+
+if [ $# -ne 0 ]; then
+    usage; exit 1
+fi
+
+if [ -n "${SECONDARY_OUTPUT}" ]; then
+    for i in $(seq 11 19); do
+        i3-msg -q workspace number $i
+        i3-msg -q move workspace to output ${SECONDARY_OUTPUT}
+    done
+    i3-msg -q workspace number 11
+fi
+if [ -n "${PRIMARY_OUTPUT}" ]; then
+    for i in $(seq 1 9); do
+        i3-msg -q workspace number $i
+        i3-msg -q move workspace to output ${SECONDARY_OUTPUT}
+    done
+fi
+i3-msg -q workspace number 1
