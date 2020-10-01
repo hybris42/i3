@@ -1,5 +1,6 @@
 general {
         colors = true
+        markup = pango
         interval = 5
 }
 
@@ -7,7 +8,7 @@ order += "battery all"
 order += "tztime local"
 
 battery all {
-        format = "%status %percentage %remaining"
+        format = "<span background='#222222'>%status %percentage (%remaining)</span>"
         format_down = ""
         status_chr = "⚡"
         status_bat = "🔋"
@@ -16,5 +17,6 @@ battery all {
 }
 
 tztime local {
-        format = "%d-%m-%Y %H:%M"
+        format = "<span background='#222222'>%time</span>"
+        format_time = "%d-%m-%Y %H:%M"
 }
