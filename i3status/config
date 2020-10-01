@@ -12,6 +12,8 @@ battery all {
         format_down = ""
         status_chr = "⚡"
         status_bat = "🔋"
+        status_unk = "⚡"
+        status_full = "⚡"
         low_threshold = 30
         threshold_type = percentage
 }
