@@ -8,7 +8,7 @@ order += "battery all"
 order += "tztime local"
 
 battery all {
-        format = "<span background='#222222'>%status %percentage (%remaining)</span>"
+        format = "<span background='#222222'>%status %percentage %remaining</span>"
         format_down = ""
         status_chr = "⚡"
         status_bat = "🔋"
