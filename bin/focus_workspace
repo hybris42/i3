@@ -32,4 +32,4 @@ fi
 
 i3-msg -q "workspace number ${NEXT_WORKSPACE}"
 # Update previous file in run/
-echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous_${CURRENT_OUTPUT}
+[ ${NEXT_WORKSPACE} -eq ${CURRENT_WORKSPACE} ] || echo -n ${CURRENT_WORKSPACE} > ~/.config/i3/run/previous_${CURRENT_OUTPUT}

@@ -46,8 +46,8 @@ bindsym $mod+j                  exec ~/.config/i3/bin/menu_workspace_switch
 bindsym $mod+space              layout toggle tabbed splith
 bindsym $mod+f                  fullscreen toggle
 # Change window focus
-bindsym $mod+Tab                focus next
-bindsym $mod+Shift+Tab          focus prev
+bindsym $mod+Tab                focus next sibling
+bindsym $mod+Shift+Tab          focus prev sibling
 bindsym $mod+Shift+Left         focus left
 bindsym $mod+Shift+Right        focus right
 bindsym $mod+Shift+Down         focus down
